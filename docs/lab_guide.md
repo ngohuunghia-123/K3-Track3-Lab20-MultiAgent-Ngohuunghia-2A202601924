@@ -113,5 +113,13 @@ Cách khắc phục (chọn 1 trong 3):
 
 Mỗi nhóm trả lời 2 câu:
 
-1. Case nào nên dùng multi-agent? Vì sao?
-2. Case nào không nên dùng multi-agent? Vì sao?
+1. **Case nào nên dùng multi-agent? Vì sao?**
+   - **Các tác vụ nghiên cứu/tổng hợp phức tạp có tính decomposability thực sự:** Khi công việc đòi hỏi phải phân cấu trúc rõ ràng thành các nhiệm vụ con độc lập và chuyên biệt (ví dụ: Researcher thu thập tài liệu thô, Analyst đánh giá độc lập tính trung thực, Writer tổng hợp thành báo cáo). Việc tách biệt các vai trò giúp giảm xung đột ngữ cảnh trong prompt.
+   - **Khi cần cơ chế tự sửa lỗi và kiểm tra chéo (Adversarial loops/Self-correction):** Việc có một Analyst hoặc Critic đánh giá độc lập dữ liệu từ Researcher giúp giảm đáng kể hiện tượng ảo giác (hallucination), kiểm chứng lại nguồn trích dẫn chéo, nâng điểm Quality score thực nghiệm từ 3.8 (baseline) lên 8.8 (multi-agent).
+   - **Khi lượng tài liệu lớn vượt quá bộ nhớ làm việc hiệu quả của mô hình:** Các agent lấy dữ liệu song song và chỉ tóm tắt các notes cô đọng chuyển tiếp giúp vượt qua hiện tượng "lost-in-the-middle" của single agent.
+
+2. **Case nào không nên dùng multi-agent? Vì sao?**
+   - **Các tác vụ ngắn, hội thoại tuyến tính hoặc tóm tắt từ một tài liệu duy nhất:** Nơi một agent chuyên dụng có thể trả lời trực tiếp hoặc thông qua Chain-of-Thought ngắn mà không cần sự phối hợp phức tạp.
+   - **Hạn chế nghiêm ngặt về ngân sách chi phí (Budget):** Luồng điều phối giữa các agent tiêu tốn lượng token gấp nhiều lần do phải truyền tải State nhiều lần qua lại (trong bài lab, chi phí tăng ~5.8 lần từ $0.000244 của baseline lên $0.001432).
+   - **Yêu cầu phản hồi thời gian thực (Low Latency):** Hệ thống multi-agent phải thực hiện nhiều lời gọi API nối tiếp nhau thông qua quyết định của Supervisor làm tăng độ trễ hệ thống (từ 4.20 giây lên 14.10 giây).
+
